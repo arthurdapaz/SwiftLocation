@@ -206,12 +206,14 @@ extension CLPlacemark {
     
     /// Formatted address
     var formattedAddress: String? {
-        guard let postalAddress = postalAddress else {
-            return nil
+        if #available(iOS 11.0, *) {
+            guard let postalAddress = postalAddress else {
+                return nil
+            }
+            let formatter = CNPostalAddressFormatter()
+            return formatter.string(from: postalAddress)
         }
-        
-        let formatter = CNPostalAddressFormatter()
-        return formatter.string(from: postalAddress)
+        return nil
     }
     
 }

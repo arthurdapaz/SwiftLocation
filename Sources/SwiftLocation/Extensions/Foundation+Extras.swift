@@ -161,7 +161,7 @@ extension CLLocationCoordinate2D: CustomStringConvertible {
 
 internal func JSONStringify(_ object: [String: Any?]) -> String {
     do {
-        let data = try JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted, .sortedKeys])
+        let data = try JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted])
         return String(data: data, encoding: .utf8) ?? ""
     } catch {
         return ""

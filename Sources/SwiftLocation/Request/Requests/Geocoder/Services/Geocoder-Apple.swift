@@ -116,7 +116,11 @@ public extension Geocoder {
             case .geoAddress(let coordinates):
                 let location = CLLocation(latitude: coordinates.latitude, longitude: coordinates.longitude)
                 let localeInstance = (locale != nil ? Locale(identifier: locale!) : nil)
-                geocoder.reverseGeocodeLocation(location, preferredLocale: localeInstance, completionHandler: completionHandler)
+                if #available(iOS 11.0, *) {
+                    geocoder.reverseGeocodeLocation(location, preferredLocale: localeInstance, completionHandler: completionHandler)
+                } else {
+                    geocoder.reverseGeocodeLocation(location, completionHandler: completionHandler)
+                }
                 
             case .getCoordinates(let address):
                 geocoder.geocodeAddressString(address, in: proximityRegion, completionHandler: completionHandler)
