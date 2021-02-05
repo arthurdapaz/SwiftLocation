@@ -60,11 +60,6 @@ public class LocationManager: LocationManagerDelegate, CustomStringConvertible {
     /// Credentials storage.
     public let credentials = SharedCredentials
     
-    /// Return true if beacon foreground broadcasting is active or not.
-    public var isBeaconBroadcastActive: Bool {
-        BeaconBroadcaster.shared.isBroadcastingActive
-    }
-    
     /// Return non `nil` values when broadcasting is active.
     public var broadcastingBeacon: BroadcastedBeacon? {
         BeaconBroadcaster.shared.beacon
@@ -351,11 +346,6 @@ public class LocationManager: LocationManagerDelegate, CustomStringConvertible {
     ///   - onStatusDidChange: callback to receive the advertising result process.
     public func broadcastAsBeacon(_ beacon: BroadcastedBeacon, onStatusDidChange: ((Error?) -> Void)? = nil) {
         BeaconBroadcaster.shared.startBroadcastingAs(beacon, onStatusDidChange: onStatusDidChange)
-    }
-    
-    /// Stop running broadcast.
-    public func stopBroadcasting() {
-        BeaconBroadcaster.shared.stopBroadcasting()
     }
     
     /// Cancel passed request from queue.

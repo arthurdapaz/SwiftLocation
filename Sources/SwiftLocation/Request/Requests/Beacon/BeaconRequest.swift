@@ -35,8 +35,6 @@ import CoreLocation
 /// Links:
 /// Monitoring and Ranging:
 ///     - https://community.estimote.com/hc/en-us/articles/203356607-What-are-region-Monitoring-and-Ranging-
-/// Background vs Foreground:
-///     - http://www.scriptscoop.com/t/194508ceaf47/ios-detecting-beacons-via-ibeacon-monitoring-ranging-vs-corebluetooth-scan.html
 public class BeaconRequest: RequestProtocol, CustomStringConvertible {
     public typealias ProducedData = Event
     

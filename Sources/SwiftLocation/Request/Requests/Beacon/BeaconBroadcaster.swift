@@ -24,9 +24,8 @@
 
 import Foundation
 import CoreLocation
-import CoreBluetooth
 
-internal class BeaconBroadcaster: NSObject, CBPeripheralManagerDelegate {
+internal class BeaconBroadcaster: NSObject {
     
     // MARK: - Internal Properties
     
@@ -36,68 +35,18 @@ internal class BeaconBroadcaster: NSObject, CBPeripheralManagerDelegate {
     /// Receive callback about the advetisting.
     internal var onStatusDidChange: ((Error?) -> Void)?
     
-    /// Check if the broadcasting is active or not.
-    internal var isBroadcastingActive: Bool {
-        peripheralManager?.isAdvertising ?? false
-    }
-    
     /// Monitored identifier.
     internal var beacon: BroadcastedBeacon?
     
     // MARK: - Private Properties
     
-    /// Manager.
-    private var peripheralManager: CBPeripheralManager?
-    
+
     // MARK: - Internal Functions
     
     /// Start broadcasting.
     internal func startBroadcastingAs(_ beacon: BroadcastedBeacon, onStatusDidChange: ((Error?) -> Void)? = nil) {
         self.beacon = beacon
         self.onStatusDidChange = onStatusDidChange
-        
-        stopBroadcasting()
-
-        self.peripheralManager = CBPeripheralManager(delegate: self, queue: nil)
-    }
-    
-    /// Stop active broadcasting.
-    internal func stopBroadcasting() {
-        peripheralManager?.stopAdvertising()
-        peripheralManager = nil
-    }
-    
-    // MARK: - CBPeripheralManagerDelegate
-    
-    func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
-        switch peripheral.state {
-        case .poweredOn:
-            guard let region = beacon?.region else {
-                LocationManager.Logger.log("Failed to get region from broadcast beacon passed.")
-                return
-            }
-            
-            let data = ((region.peripheralData(withMeasuredPower: nil)) as NSDictionary) as! Dictionary<String, Any>
-            peripheral.startAdvertising(data)
-            LocationManager.Logger.log("Bluetooth peripheral on, start adveristing")
-            
-        case .poweredOff:
-            peripheral.stopAdvertising()
-            LocationManager.Logger.log("Bluetooth peripheral off, stop adveristing")
-        default:
-            LocationManager.Logger.log("Bluetooth peripheral \(peripheral.description)")
-            break
-        }
-    }
-    
-    func peripheralManagerDidStartAdvertising(_ peripheral: CBPeripheralManager, error: Error?) {
-        onStatusDidChange?(nil)
-
-        if let error = error {
-            LocationManager.Logger.log("Error bluetooth advertising \(error.localizedDescription)")
-        } else {
-            LocationManager.Logger.log("Bluetooth advertising started successfully")
-        }
     }
     
 }
